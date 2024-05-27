@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="736.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="finalproyecto.MenuAdminController">
+   <children>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Usuarios">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="txtID" layoutX="107.0" layoutY="49.0" />
+                        <TextField fx:id="txtNOMBRE" layoutX="107.0" layoutY="84.0" />
+                        <TextField fx:id="txtDIRECCION" layoutX="107.0" layoutY="118.0" />
+                        <TextField fx:id="txtTELEFONO" layoutX="107.0" layoutY="154.0" />
+                        <Text layoutX="313.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registra los Usuarios" />
+                        <Text layoutX="53.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" />
+                        <Text layoutX="53.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" />
+                        <Text layoutX="53.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dirección" />
+                        <Text layoutX="50.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teléfono" />
+                        <TextField fx:id="txtCARNE" layoutX="488.0" layoutY="49.0" />
+                        <TextField fx:id="txtCONTRA" layoutX="488.0" layoutY="84.0" />
+                        <Text layoutX="446.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Carné" />
+                        <Text layoutX="416.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contraseña" />
+                        <Button fx:id="btnGUARDAR" layoutX="390.0" layoutY="142.0" mnemonicParsing="false" onAction="#clickGUARDAR" text="GUARDAR" />
+                        <Button fx:id="btnELIMINAR" layoutX="476.0" layoutY="142.0" mnemonicParsing="false" onAction="#clickELIMINAR" text="ELIMINAR" />
+                        <Button fx:id="bntMODIFICAR" layoutX="558.0" layoutY="142.0" mnemonicParsing="false" onAction="#clickMODIFICAR" text="MODIFICAR" />
+                        <TableView fx:id="tbUSUARIOS" layoutX="29.0" layoutY="220.0" prefHeight="200.0" prefWidth="686.0">
+                          <columns>
+                            <TableColumn fx:id="colID" prefWidth="75.0" text="ID" />
+                            <TableColumn fx:id="colNOMBRE" prefWidth="75.0" text="Nombre" />
+                              <TableColumn fx:id="colDIRECCION" prefWidth="75.0" text="Direccion" />
+                              <TableColumn fx:id="colTELEFONO" prefWidth="75.0" text="Telefono" />
+                              <TableColumn fx:id="colCARNE" prefWidth="75.0" text="Carné" />
+                              <TableColumn fx:id="colCONTRA" prefWidth="75.0" text="Contraseña" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Libros">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="317.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registra Libros" />
+                        <TextField fx:id="txtIDLIB" layoutX="118.0" layoutY="38.0" />
+                        <TextField fx:id="txtISBN" layoutX="118.0" layoutY="72.0" />
+                        <TextField fx:id="txtTITULO" layoutX="118.0" layoutY="108.0" />
+                        <TextField fx:id="txtEDITORIAL" layoutX="118.0" layoutY="178.0" />
+                        <Text layoutX="84.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" />
+                        <Text layoutX="77.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ISBN" />
+                        <Text layoutX="75.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Título" />
+                        <Text layoutX="62.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Editorial" />
+                        <TextField fx:id="txtANIO" layoutX="468.0" layoutY="38.0" />
+                        <TextField fx:id="txtCANTIDAD" layoutX="468.0" layoutY="72.0" />
+                        <Text layoutX="356.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Año de Publicación" />
+                        <Text layoutX="407.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cantidad" />
+                        <Button fx:id="btnGUARDAR" layoutX="356.0" layoutY="121.0" mnemonicParsing="false" onAction="#clickGUAR" text="GUARDAR" />
+                        <Button fx:id="btnELIMINAR" layoutX="447.0" layoutY="121.0" mnemonicParsing="false" onAction="#clickELIM" text="ELIMINAR" />
+                        <Button fx:id="btnMODIFICAR" layoutX="531.0" layoutY="121.0" mnemonicParsing="false" onAction="#clickMOD" text="MODIFICAR" />
+                        <TableView fx:id="tbLIBROS" layoutX="39.0" layoutY="210.0" prefHeight="238.0" prefWidth="658.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                        </TableView>
+                        <Text layoutX="75.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Autor" />
+                        <TextField fx:id="txtAUTOR" layoutX="118.0" layoutY="142.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Untitled Tab 2">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</StackPane>
