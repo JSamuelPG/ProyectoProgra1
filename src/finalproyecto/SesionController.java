@@ -65,7 +65,7 @@ public class SesionController implements Initializable {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 // Guardar el ID del usuario en la clase SesionUsuario
-                int idUsuario = rs.getInt("id_usuario");
+                int idUsuario = rs.getInt("id");
                 SesionUsuario.setIdUsuario(idUsuario);
 
                 // Cargar el archivo FXML de la nueva ventana

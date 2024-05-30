@@ -9,13 +9,13 @@ package finalproyecto;
  * @author patza
  */
 public class Libros {
-    private int id_libro;
-    private String isbn;
-    private String titulo;
-    private String autor;
-    private int anio;
-    private String editorial;
-    private int cantidad;
+    int id_libro;
+    String isbn;
+    String titulo;
+    String autor;
+    int anio;
+    String editorial;
+    int cantidad;
 
     public Libros(int id_libro, String isbn, String titulo, String autor, int anio, String editorial, int cantidad) {
         this.id_libro = id_libro;
