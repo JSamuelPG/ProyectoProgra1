@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="finalproyecto.MenuUsuarioController">
    <children>
       <TabPane prefHeight="400.0" prefWidth="674.0" tabClosingPolicy="UNAVAILABLE">
@@ -19,15 +18,20 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="680.0">
                      <children>
-                        <TextField layoutX="43.0" layoutY="31.0" prefHeight="25.0" prefWidth="256.0" />
-                        <Text layoutX="115.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buscar Libros" />
-                        <Text layoutX="43.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Puede realizar la busque de libros por medio del codigo, isbn, nombre o autor" wrappingWidth="256.185546875" />
-                        <Button fx:id="btnBUSCAR" layoutX="321.0" layoutY="31.0" mnemonicParsing="false" onAction="#clickBUSCAR" text="Buscar" />
-                        <Button fx:id="btnADQUIRIR" layoutX="386.0" layoutY="31.0" mnemonicParsing="false" onAction="#clickADQUIRIR" text="Adquirir Libro" />
+                        <TextField fx:id="txtIDLIBROS" layoutX="43.0" layoutY="44.0" prefHeight="25.0" prefWidth="256.0" />
+                        <Text layoutX="145.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buscar Libros" />
+                        <Text layoutX="43.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Puede realizar la busque de libros por medio del codigo, isbn, nombre o autor" wrappingWidth="256.185546875" />
+                        <Button fx:id="btnBUSCAR" layoutX="328.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickBUSCAR" text="Buscar" />
+                        <Button fx:id="btnADQUIRIR" layoutX="391.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickADQUIRIR" text="Adquirir Libro" />
                         <TableView fx:id="tbLIBROS" layoutX="23.0" layoutY="147.0" prefHeight="200.0" prefWidth="563.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn fx:id="colIDLIB" prefWidth="75.0" text="ID" />
+                            <TableColumn fx:id="colISBN" prefWidth="75.0" text="ISBN" />
+                              <TableColumn fx:id="colTITULO" prefWidth="75.0" text="TITULO" />
+                              <TableColumn fx:id="colAUTOR" prefWidth="75.0" text="AUTOR" />
+                              <TableColumn fx:id="colANIO" prefWidth="75.0" text="AÑO" />
+                              <TableColumn fx:id="colEDITORIAL" prefWidth="75.0" text="EDITORIAL" />
+                              <TableColumn fx:id="colCANTIDAD" prefWidth="75.0" text="CANTIDAD" />
                           </columns>
                         </TableView>
                      </children>

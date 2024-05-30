@@ -52,8 +52,8 @@ public class SesionController implements Initializable {
 
     @FXML
     private void clickINICIAR(ActionEvent event) {
-        administrador();
-       try {
+         administrador();
+        try {
             String carne = txtCARNE.getText();
             String contra = txtCONTRA.getText();
             Connection conn = conectarBD.getConnection();
@@ -64,6 +64,10 @@ public class SesionController implements Initializable {
             ps.setString(2, contra);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                // Guardar el ID del usuario en la clase SesionUsuario
+                int idUsuario = rs.getInt("id_usuario");
+                SesionUsuario.setIdUsuario(idUsuario);
+
                 // Cargar el archivo FXML de la nueva ventana
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/finalproyecto/menuUsuario.fxml"));
                 Parent root = loader.load();
@@ -79,7 +83,7 @@ public class SesionController implements Initializable {
                 currentStage.close();
             } else {
                 // Mostrar un mensaje de error si el usuario no existe
-                Alert alert = new Alert(AlertType.ERROR);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error de Autenticación");
                 alert.setHeaderText("El Usuario no existe");
                 alert.setContentText("Por favor, verifica tu carné y contraseña e intenta nuevamente.");
@@ -88,7 +92,7 @@ public class SesionController implements Initializable {
             rs.close();
             ps.close();
         } catch (SQLException e) {
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Error al buscar");
             alert.setContentText("Hubo un error al intentar buscar el usuario en la base de datos.");
@@ -151,5 +155,4 @@ public class SesionController implements Initializable {
             System.out.println("El usuario o la contraseña son incorrectos.");
         }
     }
-    
     }
