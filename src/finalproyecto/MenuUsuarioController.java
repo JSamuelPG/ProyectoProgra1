@@ -38,6 +38,8 @@ public class MenuUsuarioController implements Initializable {
     @FXML
     private Button btnDEVOLVER;
     @FXML
+    private Button btnACTUALIZAR;
+    @FXML
     private TableView<Libros> tbLIBROS;
     @FXML
     private TableView<Libros> tbADQUIRIDOS;
@@ -45,6 +47,7 @@ public class MenuUsuarioController implements Initializable {
     private TextField txtIDLIBROS;
     
     private ObservableList<Libros> listaLibros = FXCollections.observableArrayList();
+    private ObservableList<Libros> listaLibrosAdquiridos = FXCollections.observableArrayList();
     private Connection conn;
     /**
      * Initializes the controller class.
@@ -57,6 +60,11 @@ public class MenuUsuarioController implements Initializable {
         configurarColumnasTabla();
         // Cargar los libros iniciales desde la base de datos
         cargarLibrosDesdeBaseDeDatos();
+        
+        listaLibrosAdquiridos.clear(); 
+        // Cargar los libros adquiridos desde la base de datos
+        int idUsuario = SesionUsuario.getIdUsuario();
+        cargarLibrosAdquiridosDesdeBaseDeDatos(idUsuario);
     }    
     
     
@@ -78,6 +86,23 @@ public class MenuUsuarioController implements Initializable {
     colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 
     tbLIBROS.getColumns().addAll(colIdLibro, colIsbn, colTitulo, colAutor, colAnio, colEditorial, colCantidad);
+    
+    // Configuración de columnas para tbADQUIRIDOS
+        TableColumn<Libros, Integer> colIdLibroAdquirido = new TableColumn<>("ID");
+        TableColumn<Libros, String> colIsbnAdquirido = new TableColumn<>("ISBN");
+        TableColumn<Libros, String> colTituloAdquirido = new TableColumn<>("Título");
+        TableColumn<Libros, String> colAutorAdquirido = new TableColumn<>("Autor");
+        TableColumn<Libros, Integer> colAnioAdquirido = new TableColumn<>("Año");
+        TableColumn<Libros, String> colEditorialAdquirido = new TableColumn<>("Editorial");
+
+        colIdLibroAdquirido.setCellValueFactory(new PropertyValueFactory<>("id_libro"));
+        colIsbnAdquirido.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        colTituloAdquirido.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        colAutorAdquirido.setCellValueFactory(new PropertyValueFactory<>("autor"));
+        colAnioAdquirido.setCellValueFactory(new PropertyValueFactory<>("anio"));
+        colEditorialAdquirido.setCellValueFactory(new PropertyValueFactory<>("editorial"));
+
+        tbADQUIRIDOS.getColumns().addAll(colIdLibroAdquirido, colIsbnAdquirido, colTituloAdquirido, colAutorAdquirido, colAnioAdquirido, colEditorialAdquirido);
 }
     private void cargarLibrosDesdeBaseDeDatos() {
         listaLibros.clear();
@@ -269,8 +294,100 @@ public class MenuUsuarioController implements Initializable {
             verAlerta(Alert.AlertType.WARNING, "Libro no Seleccionado", "Por favor, seleccione un libro para adquirir.");
         }
     }
+//--------------------------------------------------------------------------------------------------------------------------------------
+    
+    private void cargarLibrosAdquiridosDesdeBaseDeDatos(int idUsuario) {
+        listaLibrosAdquiridos.clear();
+        String consultaSql = "SELECT l.idlibro, l.isbn, l.titulo, l.autor, l.anio_publicacion, l.editorial " +
+                             "FROM prestamos p " +
+                             "JOIN rlibros l ON p.id_libro = l.idlibro " +
+                             "WHERE p.id_usuario = ? AND p.estado = 'Prestado'";
 
+        try (Connection conn = conectarBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(consultaSql)) {
+
+            stmt.setInt(1, idUsuario);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id_libro = rs.getInt("idlibro");
+                    String isbn = rs.getString("isbn");
+                    String titulo = rs.getString("titulo");
+                    String autor = rs.getString("autor");
+                    int anio = rs.getInt("anio_publicacion");
+                    String editorial = rs.getString("editorial");
+
+                    Libros libro = new Libros(id_libro, isbn, titulo, autor, anio, editorial, 0);
+                    listaLibrosAdquiridos.add(libro);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            verAlerta(Alert.AlertType.ERROR, "Error", "Error al cargar libros adquiridos desde la base de datos: " + ex.getMessage());
+        }
+        tbADQUIRIDOS.setItems(listaLibrosAdquiridos);
+    }
+    
+    // Método para devolver libros
+    private void devolverLibro(int idUsuario, int idLibro) throws SQLException {
+        String updatePrestamoSql = "UPDATE prestamos SET fecha_devolucion_real = ?, estado = 'Devuelto' WHERE id_usuario = ? AND id_libro = ? AND estado = 'Prestado'";
+        try (Connection conn = conectarBD.getConnection();
+             PreparedStatement updatePrestamoStmt = conn.prepareStatement(updatePrestamoSql)) {
+
+            // Obtener la fecha actual para la fecha de devolución real
+            java.util.Date fechaActual = new java.util.Date();
+            java.sql.Date fechaDevolucionReal = new java.sql.Date(fechaActual.getTime());
+
+            // Configurar los parámetros de la consulta
+            updatePrestamoStmt.setDate(1, fechaDevolucionReal);
+            updatePrestamoStmt.setInt(2, idUsuario);
+            updatePrestamoStmt.setInt(3, idLibro);
+
+            int filasActualizadas = updatePrestamoStmt.executeUpdate();
+
+            if (filasActualizadas > 0) {
+                // Actualizar la cantidad del libro en rlibros
+                String updateLibroSql = "UPDATE rlibros SET cantidad = cantidad + 1 WHERE idlibro = ?";
+                try (PreparedStatement updateLibroStmt = conn.prepareStatement(updateLibroSql)) {
+                    updateLibroStmt.setInt(1, idLibro);
+                    updateLibroStmt.executeUpdate();
+                }
+            } else {
+                throw new SQLException("No se encontró un préstamo activo para el libro y usuario proporcionados.");
+            }
+        }
+    }
+    
+    private void actualizarTablaAdquiridos() {
+    int idUsuario = SesionUsuario.getIdUsuario(); // Obtener el ID del usuario desde la sesión
+    cargarLibrosAdquiridosDesdeBaseDeDatos(idUsuario);
+    }
+    
     @FXML
     private void clickDEVOLVER(ActionEvent event) {
+        Libros libroSeleccionado = tbADQUIRIDOS.getSelectionModel().getSelectedItem();
+        if (libroSeleccionado != null) {
+            int idLibro = libroSeleccionado.getId_libro();
+            int idUsuario = SesionUsuario.getIdUsuario(); // Obtener el ID del usuario desde la sesión
+
+            try {
+                devolverLibro(idUsuario, idLibro);
+                verAlerta(Alert.AlertType.INFORMATION, "Devolución Exitosa", "El libro ha sido devuelto con éxito");
+                cargarLibrosAdquiridosDesdeBaseDeDatos(idUsuario); // Actualizar tabla de libros adquiridos
+                cargarLibrosDesdeBaseDeDatos(); // Actualizar tabla de libros disponibles
+            } catch (SQLException ex) {
+                Logger.getLogger(MenuUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+                verAlerta(Alert.AlertType.ERROR, "Error en la Devolución", "Error al devolver el libro: " + ex.getMessage());
+            }
+        } else {
+            verAlerta(Alert.AlertType.WARNING, "Libro no Seleccionado", "Por favor, seleccione un libro para devolver.");
+        }
+        actualizarTablaAdquiridos();
+    }
+    
+    @FXML
+    private void clickACTUALIZAR(ActionEvent event) {
+        int idUsuario = SesionUsuario.getIdUsuario(); // Obtener el ID del usuario desde la sesión
+    cargarLibrosAdquiridosDesdeBaseDeDatos(idUsuario);
     }
 }

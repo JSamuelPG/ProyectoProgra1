@@ -32,9 +32,10 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TableView fx:id="tbADQUIRIDOS" layoutX="12.0" layoutY="68.0" prefHeight="260.0" prefWidth="577.0" />
-                        <Button fx:id="btnDEVOLVER" layoutX="476.0" layoutY="35.0" mnemonicParsing="false" onAction="#clickDEVOLVER" text="DEVOLVER" />
-                        <Text layoutX="104.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Presiona un libro dentro de la tabla, luego presiona DEVOLVER" />
+                        <Button fx:id="btnDEVOLVER" layoutX="445.0" layoutY="35.0" mnemonicParsing="false" onAction="#clickDEVOLVER" text="DEVOLVER" />
+                        <Text layoutX="141.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Presiona un libro dentro de la tabla, luego presiona DEVOLVER" />
                         <Text layoutX="244.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIBROS ALQUILADOS" />
+                        <Button fx:id="btnACTUALIZAR" layoutX="69.0" layoutY="35.0" mnemonicParsing="false" onAction="#clickACTUALIZAR" text="ACTUALIZAR TABLA" />
                      </children>
                   </AnchorPane>
             </content>
