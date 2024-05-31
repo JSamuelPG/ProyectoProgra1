@@ -7,7 +7,9 @@ package finalproyecto;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -23,6 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * FXML Controller class
@@ -64,46 +67,126 @@ public class MenuAdminController implements Initializable {
     @FXML
     private Button btnMODIFICAR;
     @FXML
-    private TableView<?> tbLIBROS;
+    private TableView<Libros> tbLIBROS;
     @FXML
     private TextField txtCONTRA;
     @FXML
-    private TableView<?> tbUSUARIOS;
-    @FXML
-    private TableColumn<?, ?> colID;
-    @FXML
-    private TableColumn<?, ?> colNOMBRE;
-    @FXML
-    private TableColumn<?, ?> colDIRECCION;
-    @FXML
-    private TableColumn<?, ?> colTELEFONO;
-    @FXML
-    private TableColumn<?, ?> colCARNE;
-    @FXML
-    private TableColumn<?, ?> colCONTRA;
-
+    private TableView<Usuario> tbUSUARIOS;
     
     private ObservableList<Usuario> verlista = FXCollections.observableArrayList();
+    private ObservableList<Libros> listaLibros = FXCollections.observableArrayList();
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+         configurarColumnasTabla();
+         cargarLibrosDesdeBaseDeDatos();
+         cargarUsuariosDesdeBaseDeDatos();
     }  
+    
+    private void configurarColumnasTabla() {
+        TableColumn<Libros, Integer> colIdLibro = new TableColumn<>("ID");
+        TableColumn<Libros, String> colIsbn = new TableColumn<>("ISBN");
+        TableColumn<Libros, String> colTitulo = new TableColumn<>("Título");
+        TableColumn<Libros, String> colAutor = new TableColumn<>("Autor");
+        TableColumn<Libros, Integer> colAnio = new TableColumn<>("Año");
+        TableColumn<Libros, String> colEditorial = new TableColumn<>("Editorial");
+        TableColumn<Libros, Integer> colCantidad = new TableColumn<>("Cantidad Disponible");
+
+        colIdLibro.setCellValueFactory(new PropertyValueFactory<>("id_libro"));
+        colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        colAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
+        colAnio.setCellValueFactory(new PropertyValueFactory<>("anio"));
+        colEditorial.setCellValueFactory(new PropertyValueFactory<>("editorial"));
+        colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+
+        tbLIBROS.getColumns().addAll(colIdLibro, colIsbn, colTitulo, colAutor, colAnio, colEditorial, colCantidad);
+        
+        TableColumn<Usuario, Integer> colId = new TableColumn<>("ID");
+        TableColumn<Usuario, String> colNombre = new TableColumn<>("Nombre");
+        TableColumn<Usuario, String> colDireccion = new TableColumn<>("Dirección");
+        TableColumn<Usuario, Integer> colTelefono = new TableColumn<>("Teléfono");
+        TableColumn<Usuario, String> colCarne = new TableColumn<>("Carné");
+        TableColumn<Usuario, String> colContrasenia = new TableColumn<>("Contraseña");
+
+        // Asignar las propiedades de cada columna
+        colId.setCellValueFactory(new PropertyValueFactory<>("idusuario"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        colCarne.setCellValueFactory(new PropertyValueFactory<>("carne"));
+        colContrasenia.setCellValueFactory(new PropertyValueFactory<>("contra"));
+
+        // Agregar las columnas a la TableView
+        tbUSUARIOS.getColumns().addAll(colId, colNombre, colDireccion, colTelefono, colCarne, colContrasenia);
+
+     }
+    
+    private void cargarLibrosDesdeBaseDeDatos() {
+        listaLibros.clear();
+       String consultaSql = "SELECT * FROM rlibros";
+
+       try (Connection conn = conectarBD.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(consultaSql)) {
+
+           while (rs.next()) {
+               int id_libro = rs.getInt("idlibro");
+               String isbn = rs.getString("isbn");
+               String titulo = rs.getString("titulo");
+               String autor = rs.getString("autor");
+               int anio = rs.getInt("anio_publicacion");
+               String editorial = rs.getString("editorial");
+               int cantidad = rs.getInt("cantidad");
+
+               Libros libro = new Libros(id_libro, isbn, titulo, autor, anio, editorial, cantidad);
+               listaLibros.add(libro);
+           }
+       } catch (SQLException ex) {
+           ex.printStackTrace();
+           verAlerta(Alert.AlertType.ERROR, "Error", "Error al cargar libros desde la base de datos: " + ex.getMessage());
+       }
+       tbLIBROS.setItems(listaLibros);
+}
+ 
+    private void cargarUsuariosDesdeBaseDeDatos() {
+    verlista.clear(); // Limpia
+    String consultaSql = "SELECT * FROM usuarios";
+
+    try (Connection conn = conectarBD.getConnection();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(consultaSql)) {
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nombre = rs.getString("nombre");
+            String direccion = rs.getString("direccion");
+            int telefono = rs.getInt("telefono");
+            String carne = rs.getString("carne");
+            String contrasenia = rs.getString("contrasenia");
+
+            Usuario usuario = new Usuario(id, nombre, direccion, telefono, carne, contrasenia);
+            verlista.add(usuario);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        verAlerta(Alert.AlertType.ERROR, "Error", "Error al cargar usuarios desde la base de datos: " + ex.getMessage());
+    }
+    tbUSUARIOS.setItems(verlista);
+}
+    
     
       ArrayList<Usuario> listaUsuarios = new ArrayList<>();
       Connection conn;
-    
-   
-    
+      
     //METODOS CRUD PARA USUARIOS
     @FXML
     private void clickGUARDAR(ActionEvent event) {
        PreparedStatement st = null;
 
         try {
-            // Create a new Usuario object
             Usuario usu = new Usuario(
                 Integer.parseInt(txtID.getText()),
                 txtNOMBRE.getText(),
@@ -120,7 +203,6 @@ public class MenuAdminController implements Initializable {
             String sqlInsert = "INSERT INTO usuarios(id, nombre, direccion, telefono, carne, contrasenia) VALUES (?, ?, ?, ?, ?, ?)";
             st = conn.prepareStatement(sqlInsert);
 
-            // Set the parameters
             st.setInt(1, usu.getIdusuario());
             st.setString(2, usu.getNombre());
             st.setString(3, usu.getDireccion());
@@ -128,20 +210,18 @@ public class MenuAdminController implements Initializable {
             st.setString(5, usu.getCarne());
             st.setString(6, usu.getContra());
 
-            // Execute the statement
             st.executeUpdate();
             limpiar();
             verAlerta(Alert.AlertType.INFORMATION, "Registro Exitoso", "El usuario ha sido registrado");
         } catch (SQLException ex) {
-            Logger.getLogger(ReUsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MenuAdminController.class.getName()).log(Level.SEVERE, null, ex);
             verAlerta(Alert.AlertType.ERROR, "Error en el Registro", "Error en el registro: " + ex.getMessage());
         } finally {
-            // Close the PreparedStatement
             if (st != null) {
                 try {
                     st.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(ReUsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MenuAdminController.class.getName()).log(Level.SEVERE, null, ex);
                     verAlerta(Alert.AlertType.ERROR, "Error", "El usuario ya existe: " + ex.getMessage());
                 }
             }
@@ -247,7 +327,7 @@ public class MenuAdminController implements Initializable {
 
     //METODOS CRUD PARA LIBROS ----------------------------------------------------------------------------------------------------
     
-    private ArrayList<Libros> listaLibros = new ArrayList<>();
+
 
     public void ingresarLibros() {
         PreparedStatement ps = null;
@@ -267,7 +347,6 @@ public class MenuAdminController implements Initializable {
             conn = conectarBD.getConnection();
 
             String ingreSQL = "INSERT INTO rlibros(idlibro, isbn, titulo, autor, anio_publicacion, editorial, cantidad) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
             ps = conn.prepareStatement(ingreSQL);
 
             ps.setInt(1, ingresa.getId_libro());
@@ -284,13 +363,15 @@ public class MenuAdminController implements Initializable {
             Logger.getLogger(MenuAdminController.class.getName()).log(Level.SEVERE, null, ex);
             verAlerta(Alert.AlertType.ERROR, "Error en el Registro", "Error en el registro: " + ex.getMessage());
         } finally {
-            // Cerrar el PreparedStatement
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(MenuAdminController.class.getName()).log(Level.SEVERE, null, ex);
-                }}}}
+                }
+            }
+        }
+    }
     @FXML
     private void clickGUAR(ActionEvent event) {
         ingresarLibros();

@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -34,16 +33,7 @@
                         <Button fx:id="btnGUARDAR" layoutX="390.0" layoutY="142.0" mnemonicParsing="false" onAction="#clickGUARDAR" text="GUARDAR" />
                         <Button fx:id="btnELIMINAR" layoutX="476.0" layoutY="142.0" mnemonicParsing="false" onAction="#clickELIMINAR" text="ELIMINAR" />
                         <Button fx:id="bntMODIFICAR" layoutX="558.0" layoutY="142.0" mnemonicParsing="false" onAction="#clickMODIFICAR" text="MODIFICAR" />
-                        <TableView fx:id="tbUSUARIOS" layoutX="29.0" layoutY="220.0" prefHeight="200.0" prefWidth="686.0">
-                          <columns>
-                            <TableColumn fx:id="colID" prefWidth="75.0" text="ID" />
-                            <TableColumn fx:id="colNOMBRE" prefWidth="75.0" text="Nombre" />
-                              <TableColumn fx:id="colDIRECCION" prefWidth="75.0" text="Direccion" />
-                              <TableColumn fx:id="colTELEFONO" prefWidth="75.0" text="Telefono" />
-                              <TableColumn fx:id="colCARNE" prefWidth="75.0" text="Carné" />
-                              <TableColumn fx:id="colCONTRA" prefWidth="75.0" text="Contraseña" />
-                          </columns>
-                        </TableView>
+                        <TableView fx:id="tbUSUARIOS" layoutX="29.0" layoutY="220.0" prefHeight="200.0" prefWidth="686.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -68,23 +58,13 @@
                         <Button fx:id="btnGUARDAR" layoutX="356.0" layoutY="121.0" mnemonicParsing="false" onAction="#clickGUAR" text="GUARDAR" />
                         <Button fx:id="btnELIMINAR" layoutX="447.0" layoutY="121.0" mnemonicParsing="false" onAction="#clickELIM" text="ELIMINAR" />
                         <Button fx:id="btnMODIFICAR" layoutX="531.0" layoutY="121.0" mnemonicParsing="false" onAction="#clickMOD" text="MODIFICAR" />
-                        <TableView fx:id="tbLIBROS" layoutX="39.0" layoutY="210.0" prefHeight="238.0" prefWidth="658.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
-                        </TableView>
+                        <TableView fx:id="tbLIBROS" layoutX="39.0" layoutY="210.0" prefHeight="238.0" prefWidth="658.0" />
                         <Text layoutX="75.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Autor" />
                         <TextField fx:id="txtAUTOR" layoutX="118.0" layoutY="142.0" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab text="Untitled Tab 2">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-               </content>
-            </Tab>
         </tabs>
       </TabPane>
    </children>

@@ -52,7 +52,10 @@ public class SesionController implements Initializable {
 
     @FXML
     private void clickINICIAR(ActionEvent event) {
-         administrador();
+         if (administrador()) {
+            return; // Salir del método si es administrador y ya se cambió la escena
+        }
+
         try {
             String carne = txtCARNE.getText();
             String contra = txtCONTRA.getText();
@@ -125,34 +128,26 @@ public class SesionController implements Initializable {
         }
     }
     
-     private void administrador() {
-        // Obtener los valores ingresados
+    private boolean administrador() {
         String carne = txtCARNE.getText();
         String contra = txtCONTRA.getText();
 
-        // Verificar si las credenciales son correctas
         if ("admin".equals(carne) && "1444".equals(contra)) {
             try {
-                // Cargar el archivo FXML de la nueva ventana
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/finalproyecto/menuAdmin.fxml"));
                 Parent root = loader.load();
 
-                // Crear una nueva escena con el contenido cargado
                 Scene scene = new Scene(root);
-
-                // Obtener la ventana actual y cambiar la escena
                 Stage stage = (Stage) btnINICIAR.getScene().getWindow();
                 stage.setScene(scene);
                 stage.setTitle("Admin Panel");
                 stage.show();
 
+                return true; // Indicar que se cambió la escena para el administrador
             } catch (IOException e) {
-                // Manejar errores de IO
                 e.printStackTrace();
             }
-        } else {
-            // Simplemente imprimir en consola si las credenciales son incorrectas
-            System.out.println("El usuario o la contraseña son incorrectos.");
         }
+        return false; // No es administrador o hubo un error
     }
     }

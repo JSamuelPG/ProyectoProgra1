@@ -140,7 +140,7 @@ public class MenuUsuarioController implements Initializable {
        
     private void buscarLibros(String terminoBusqueda) {
     listaLibros.clear();
-    System.out.println("Iniciando búsqueda de libros..."); // Log de depuración
+    System.out.println("Iniciando búsqueda de libros..."); // quiero ver si inicia busqueda en consola
 
     String sql = "SELECT * FROM rlibros WHERE CAST(idlibro AS TEXT) LIKE ? OR isbn LIKE ? OR titulo LIKE ? OR autor LIKE ?";
 
@@ -390,4 +390,7 @@ public class MenuUsuarioController implements Initializable {
         int idUsuario = SesionUsuario.getIdUsuario(); // Obtener el ID del usuario desde la sesión
     cargarLibrosAdquiridosDesdeBaseDeDatos(idUsuario);
     }
+    
+    //------------------------------------------------------------------------------------------------------------------------------------
+    
 }

@@ -28,8 +28,6 @@ public class Prestamo {
         this.estado = estado;
     }
 
-    // Getters y setters (puedes generarlos automáticamente en tu IDE)
-
     public int getIdPrestamo() {
         return idPrestamo;
     }

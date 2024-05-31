@@ -148,7 +148,7 @@ public class ReUsuariosController implements Initializable {
             stage.show();
 
         } catch (IOException e) {
-            // Manejar errores de IO
+            // Manejar errores
             e.printStackTrace();
         }
     }
